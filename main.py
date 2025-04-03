@@ -1,15 +1,9 @@
-import logging
-from services.tithi_service import calculate_tithi
-
 from fastapi import FastAPI
 
 app = FastAPI()
 
-@app.get("/")
-def read_root(date):
-    from utils.date_utils import get_date_from_string
-    date = get_date_from_string(date)
-    return calculate_tithi(date)
+from api.endpoints import router as api_router
+app.include_router(api_router)
 
 if __name__ == "__main__":
     import uvicorn

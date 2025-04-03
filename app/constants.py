@@ -2,36 +2,36 @@
 
 # Tithi names
 TITHI_NAMES = [
-    "Pratipada",     # 1
-    "Dwitiya",       # 2
-    "Tritiya",       # 3
-    "Chaturthi",     # 4
-    "Panchami",      # 5
-    "Shashthi",      # 6
-    "Saptami",       # 7
-    "Ashtami",       # 8
-    "Navami",        # 9
-    "Dashami",       # 10
-    "Ekadashi",      # 11
-    "Dwadashi",      # 12
-    "Trayodashi",    # 13
-    "Chaturdashi",   # 14
-    "Purnima",       # 15 (Full Moon)
-    "Pratipada",     # 1
-    "Dwitiya",       # 2
-    "Tritiya",       # 3
-    "Chaturthi",     # 4
-    "Panchami",      # 5
-    "Shashthi",      # 6
-    "Saptami",       # 7
-    "Ashtami",       # 8
-    "Navami",        # 9
-    "Dashami",       # 10
-    "Ekadashi",      # 11
-    "Dwadashi",      # 12
-    "Trayodashi",    # 13
-    "Chaturdashi",   # 14
-    "Amavasya"       # 15 (New Moon)
+    "Pratipada",  # 1
+    "Dwitiya",  # 2
+    "Tritiya",  # 3
+    "Chaturthi",  # 4
+    "Panchami",  # 5
+    "Shashthi",  # 6
+    "Saptami",  # 7
+    "Ashtami",  # 8
+    "Navami",  # 9
+    "Dashami",  # 10
+    "Ekadashi",  # 11
+    "Dwadashi",  # 12
+    "Trayodashi",  # 13
+    "Chaturdashi",  # 14
+    "Purnima",  # 15 (Full Moon)
+    "Pratipada",  # 1
+    "Dwitiya",  # 2
+    "Tritiya",  # 3
+    "Chaturthi",  # 4
+    "Panchami",  # 5
+    "Shashthi",  # 6
+    "Saptami",  # 7
+    "Ashtami",  # 8
+    "Navami",  # 9
+    "Dashami",  # 10
+    "Ekadashi",  # 11
+    "Dwadashi",  # 12
+    "Trayodashi",  # 13
+    "Chaturdashi",  # 14
+    "Amavasya",  # 15 (New Moon)
 ]
 
 # Paksha names
@@ -76,27 +76,27 @@ SOLAR_MONTH_NAMES = (
     "Karka",
     "Simha",
     "Kanya",
-    "Tula", 
-    "Vrischika", 
+    "Tula",
+    "Vrischika",
     "Dhanu",
     "Makara",
     "Kumbha",
-    "Meena"
+    "Meena",
 )
 
 # LUNAR month names (Amanta system, starting with Chaitra)
 LUNAR_MONTH_NAMES = (
     "Chaitra",
-    "Vaishakha", 
-    "Jyeshtha", 
-    "Ashadha", 
-    "Shravana", 
-    "Bhadrapada", 
+    "Vaishakha",
+    "Jyeshtha",
+    "Ashadha",
+    "Shravana",
+    "Bhadrapada",
     "Ashwina",
-    "Kartika", 
+    "Kartika",
     "Margashirsha",
     "Pausha",
-    "Magha", 
+    "Magha",
     "Phalguna",
 )
 
