@@ -1,0 +1,87 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+venv/
+ENV/
+dist/
+build/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.whl
+MANIFEST
+
+# PyInstaller
+#  Usually these files are written into a dist/ directory.
+#  For more information, see the PyInstaller documentation:
+#  https://pyinstaller.readthedocs.io/en/stable/when-things-go-wrong.html
+# _MEIPASS*
+#   Note: the `_MEIPASS*` match is necessary because PyInstaller sometimes
+#   puts temporary files in the root directory.
+_MEIPASS*
+*.spec
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py*
+db.sqlite3
+db.sqlite3-*
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# mkdocs
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# flake8
+.flake8
+
+# pytest
+.pytest_cache/
+
+# Environments
+.env
+.venv
+venv/
+env/
+
+# General
+tmp/
+temp/
+*.swp
+*.DS_Store
