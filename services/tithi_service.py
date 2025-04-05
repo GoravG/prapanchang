@@ -1,15 +1,18 @@
 from utils.logger import logger
 from jyotisha.panchaanga.temporal.time import Date
-from jyotisha.panchaanga.spatio_temporal import daily
+from jyotisha.panchaanga.spatio_temporal import daily as Daily
 from jyotisha.panchaanga.temporal import time
 from jyotisha.panchaanga.spatio_temporal import City
 from app.constants import TITHI_NAMES, NAKSHATRA_NAMES, LUNAR_MONTH_NAMES
+from jyotisha.panchaanga.temporal.festival.rules import RulesRepo
+from jyotisha.panchaanga.temporal import names
+from indic_transliteration import sanscript
 
 
 def get_daily_panchaanga(date: Date):
     pune = City.get_city_from_db("Pune")
     jd = time.utc_gregorian_to_jd(Date(date.year, date.month, date.day))
-    panchanga = daily.DailyPanchaanga.from_city_and_julian_day(city=pune, julian_day=jd)
+    panchanga = Daily.DailyPanchaanga.from_city_and_julian_day(city=pune, julian_day=jd)
     return panchanga
 
 
@@ -33,6 +36,13 @@ def calculate_tithi(date: Date) -> str:
         "nakshatra_name": NAKSHATRA_NAMES[sunrise_angas.nakshatra_at_sunrise.index - 1],
         "month": panch.lunar_month_sunrise.index,
         "month_name": get_month_name(panch.lunar_month_sunrise.index),
+        "samvatsara": get_samvatsara_name(Daily, panch),
+        "idx": names.NAMES["AYANA_NAMES"]["sa"][sanscript.DEVANAGARI][
+            panch.solar_sidereal_date_sunset.month % 12 + 1
+        ],
+        "solar_month": panch.solar_sidereal_date_sunset.month,
+        "solar_month_day": panch.solar_sidereal_date_sunset.day,
+        "solar_month_transition": panch.solar_sidereal_date_sunset.month_transition,
     }
 
 
@@ -43,3 +53,10 @@ def get_month_name(month_index):
         month_index = int(month_index + 0.5)  # Convert float to nearest integer
         prefix = "Adhika "
     return f"{prefix}{LUNAR_MONTH_NAMES[month_index - 1]}"
+
+
+def get_samvatsara_name(daily: Daily, panchanga: Daily.DailyPanchaanga):
+    """Returns the name of the Samvatsara based on its index."""
+    return daily.DailyPanchaanga.get_samvatsara(
+        panchanga, month_type=RulesRepo.TROPICAL_MONTH_DIR
+    )
