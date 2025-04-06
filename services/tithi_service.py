@@ -68,8 +68,24 @@ class TithiService:
             ),
         }
 
-    def calculate_tithi(self, date_obj: date) -> Dict[str, Any]:
+    def calculate_tithi(
+        self, date_obj: date, timezone: Optional[str] = None, city: Optional[str] = None
+    ) -> Dict[str, Any]:
         """Calculate tithi and related details for given date."""
+        try:
+            if timezone or city:
+                temp_service = TithiService(
+                    timezone=timezone or self.timezone._timezone_id,
+                    city=city or self.city.name,
+                )
+                return temp_service._calculate_tithi_internal(date_obj)
+            return self._calculate_tithi_internal(date_obj)
+        except Exception as e:
+            logger.error(f"Error calculating tithi: {str(e)}")
+            raise
+
+    def _calculate_tithi_internal(self, date_obj: date) -> Dict[str, Any]:
+        """Internal method to calculate tithi details."""
         try:
             panch = self.get_daily_panchaanga(date_obj)
             sunrise_angas = panch.sunrise_day_angas
@@ -98,7 +114,3 @@ class TithiService:
         except Exception as e:
             logger.error(f"Error calculating tithi: {str(e)}")
             raise
-
-
-# Create a singleton instance
-tithi_service = TithiService()
