@@ -1,62 +1,104 @@
 from utils.logger import logger
-from jyotisha.panchaanga.temporal.time import Date
+from jyotisha.panchaanga.temporal.time import Date, Timezone
 from jyotisha.panchaanga.spatio_temporal import daily as Daily
-from jyotisha.panchaanga.temporal import time
 from jyotisha.panchaanga.spatio_temporal import City
 from app.constants import TITHI_NAMES, NAKSHATRA_NAMES, LUNAR_MONTH_NAMES
 from jyotisha.panchaanga.temporal.festival.rules import RulesRepo
 from jyotisha.panchaanga.temporal import names
 from indic_transliteration import sanscript
+from typing import Dict, Any, Optional
+from datetime import date
 
 
-def get_daily_panchaanga(date: Date):
-    pune = City.get_city_from_db("Pune")
-    jd = time.utc_gregorian_to_jd(Date(date.year, date.month, date.day))
-    panchanga = Daily.DailyPanchaanga.from_city_and_julian_day(city=pune, julian_day=jd)
-    return panchanga
+class TithiService:
+    def __init__(self, timezone: str = "Asia/Kolkata", city: str = "Pune"):
+        self.timezone = Timezone(timezone)
+        self.city = City.get_city_from_db(city)
+
+    def get_daily_panchaanga(self, date_obj: date) -> Daily.DailyPanchaanga:
+        """Get daily panchaanga for given date."""
+        jd = self.timezone.local_time_to_julian_day(
+            Date(date_obj.year, date_obj.month, date_obj.day)
+        )
+        return Daily.DailyPanchaanga.from_city_and_julian_day(
+            city=self.city, julian_day=jd
+        )
+
+    def get_month_name(self, month_index: float) -> str:
+        """Returns the name of the month based on its index."""
+        prefix = ""
+        if isinstance(month_index, float):
+            month_index = int(month_index + 0.5)
+            prefix = "Adhika "
+        return f"{prefix}{LUNAR_MONTH_NAMES[month_index - 1]}"
+
+    def get_samvatsara_name(self, panchanga: Daily.DailyPanchaanga) -> str:
+        """Returns the name of the Samvatsara based on its index."""
+        return Daily.DailyPanchaanga.get_samvatsara(
+            panchanga, month_type=RulesRepo.TROPICAL_MONTH_DIR
+        )
+
+    def get_solar_details(self, panch: Daily.DailyPanchaanga) -> Dict[str, Any]:
+        """Get solar-related details from panchaanga."""
+        return {
+            "solar_month": panch.solar_sidereal_date_sunset.month,
+            "solar_month_day": panch.solar_sidereal_date_sunset.day,
+            "solar_month_transition": panch.solar_sidereal_date_sunset.month_transition,
+            "ayana": names.NAMES["AYANA_NAMES"]["sa"][sanscript.DEVANAGARI][
+                panch.solar_sidereal_date_sunset.month % 12 + 1
+            ],
+        }
+
+    def get_time_details(self, panch: Daily.DailyPanchaanga) -> Dict[str, str]:
+        """Get time-related details from panchaanga."""
+        return {
+            "sunrise": str(
+                self.timezone.julian_day_to_local_time(
+                    panch.jd_sunrise, round_seconds=True
+                )
+                .to_datetime()
+                .strftime("%I:%M %p")
+            ),
+            "sunset": str(
+                self.timezone.julian_day_to_local_time(
+                    panch.jd_sunset, round_seconds=True
+                )
+                .to_datetime()
+                .strftime("%I:%M %p")
+            ),
+        }
+
+    def calculate_tithi(self, date_obj: date) -> Dict[str, Any]:
+        """Calculate tithi and related details for given date."""
+        try:
+            panch = self.get_daily_panchaanga(date_obj)
+            sunrise_angas = panch.sunrise_day_angas
+
+            logger.debug(
+                f"Date: {date_obj}, "
+                f"Tithi: {sunrise_angas.tithi_at_sunrise.index}, "
+                f"Nakshatra: {sunrise_angas.nakshatra_at_sunrise.index}, "
+                f"Month: {panch.lunar_month_sunrise.index}"
+            )
+
+            return {
+                "date": date_obj,
+                "tithi": sunrise_angas.tithi_at_sunrise.index,
+                "tithi_name": TITHI_NAMES[sunrise_angas.tithi_at_sunrise.index - 1],
+                "nakshatra": sunrise_angas.nakshatra_at_sunrise.index,
+                "nakshatra_name": NAKSHATRA_NAMES[
+                    sunrise_angas.nakshatra_at_sunrise.index - 1
+                ],
+                "month": panch.lunar_month_sunrise.index,
+                "month_name": self.get_month_name(panch.lunar_month_sunrise.index),
+                "samvatsara": self.get_samvatsara_name(panch),
+                **self.get_solar_details(panch),
+                **self.get_time_details(panch),
+            }
+        except Exception as e:
+            logger.error(f"Error calculating tithi: {str(e)}")
+            raise
 
 
-def calculate_tithi(date: Date) -> str:
-    panch = get_daily_panchaanga(date)
-    sunrise_angas = panch.sunrise_day_angas
-
-    formatted_date = date.strftime("%d-%m-%Y")
-    logger.debug(
-        f"Date: {formatted_date}, "
-        f"Tithi Index: {sunrise_angas.tithi_at_sunrise.index}, Tithi Name: {TITHI_NAMES[sunrise_angas.tithi_at_sunrise.index - 1]}, "
-        f"Nakshatra Index: {sunrise_angas.nakshatra_at_sunrise.index}, Nakshatra Name: {NAKSHATRA_NAMES[sunrise_angas.nakshatra_at_sunrise.index - 1]}, "
-        f"Lunar Month Index: {panch.lunar_month_sunrise.index}"
-    )
-
-    return {
-        "date": formatted_date,
-        "tithi": sunrise_angas.tithi_at_sunrise.index,
-        "tithi_name": TITHI_NAMES[sunrise_angas.tithi_at_sunrise.index - 1],
-        "nakshatra": sunrise_angas.nakshatra_at_sunrise.index,
-        "nakshatra_name": NAKSHATRA_NAMES[sunrise_angas.nakshatra_at_sunrise.index - 1],
-        "month": panch.lunar_month_sunrise.index,
-        "month_name": get_month_name(panch.lunar_month_sunrise.index),
-        "samvatsara": get_samvatsara_name(Daily, panch),
-        "idx": names.NAMES["AYANA_NAMES"]["sa"][sanscript.DEVANAGARI][
-            panch.solar_sidereal_date_sunset.month % 12 + 1
-        ],
-        "solar_month": panch.solar_sidereal_date_sunset.month,
-        "solar_month_day": panch.solar_sidereal_date_sunset.day,
-        "solar_month_transition": panch.solar_sidereal_date_sunset.month_transition,
-    }
-
-
-def get_month_name(month_index):
-    """Returns the name of the month based on its index."""
-    prefix = ""
-    if isinstance(month_index, float):
-        month_index = int(month_index + 0.5)  # Convert float to nearest integer
-        prefix = "Adhika "
-    return f"{prefix}{LUNAR_MONTH_NAMES[month_index - 1]}"
-
-
-def get_samvatsara_name(daily: Daily, panchanga: Daily.DailyPanchaanga):
-    """Returns the name of the Samvatsara based on its index."""
-    return daily.DailyPanchaanga.get_samvatsara(
-        panchanga, month_type=RulesRepo.TROPICAL_MONTH_DIR
-    )
+# Create a singleton instance
+tithi_service = TithiService()
