@@ -2,7 +2,7 @@ from utils.logger import logger
 from jyotisha.panchaanga.temporal.time import Date, Timezone
 from jyotisha.panchaanga.spatio_temporal import daily as Daily
 from jyotisha.panchaanga.spatio_temporal import City
-from app.constants import TITHI_NAMES, NAKSHATRA_NAMES, LUNAR_MONTH_NAMES
+from app.constants.constants import TITHI_NAMES, NAKSHATRA_NAMES, LUNAR_MONTH_NAMES
 from jyotisha.panchaanga.temporal.festival.rules import RulesRepo
 from jyotisha.panchaanga.temporal import names
 from indic_transliteration import sanscript
@@ -51,21 +51,43 @@ class TithiService:
 
     def get_time_details(self, panch: Daily.DailyPanchaanga) -> Dict[str, str]:
         """Get time-related details from panchaanga."""
+
+        def format_time(julian_day: float) -> str:
+            try:
+                local_time = self.timezone.julian_day_to_local_time(
+                    julian_day, round_seconds=True
+                )
+                if not local_time:
+                    return "N/A"
+
+                # Convert to hours, minutes, seconds
+                total_seconds = int(local_time.second)
+                extra_minutes = total_seconds // 60
+                adjusted_seconds = total_seconds % 60
+                total_minutes = local_time.minute + extra_minutes
+
+                # Adjust the time components
+                adjusted_hour = local_time.hour + (total_minutes // 60)
+                adjusted_minute = total_minutes % 60
+
+                # Create new time object with adjusted values
+                adjusted_time = Date(
+                    year=local_time.year,
+                    month=local_time.month,
+                    day=local_time.day,
+                    hour=adjusted_hour,
+                    minute=adjusted_minute,
+                    second=adjusted_seconds,
+                )
+
+                return adjusted_time.to_datetime().strftime("%I:%M %p")
+            except Exception as e:
+                logger.error(f"Error formatting time: {str(e)}")
+                return "N/A"
+
         return {
-            "sunrise": str(
-                self.timezone.julian_day_to_local_time(
-                    panch.jd_sunrise, round_seconds=True
-                )
-                .to_datetime()
-                .strftime("%I:%M %p")
-            ),
-            "sunset": str(
-                self.timezone.julian_day_to_local_time(
-                    panch.jd_sunset, round_seconds=True
-                )
-                .to_datetime()
-                .strftime("%I:%M %p")
-            ),
+            "sunrise": format_time(panch.jd_sunrise),
+            "sunset": format_time(panch.jd_sunset),
         }
 
     def calculate_tithi(

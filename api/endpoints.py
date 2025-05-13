@@ -1,14 +1,18 @@
-from fastapi import APIRouter, Query, Path
+from fastapi import APIRouter, Query, Path, Request
 from datetime import date
 from services.tithi_service import TithiService
+from services.festival_service import FestivalService
 from schemas.date_schemas import DateInput
 from jyotisha.panchaanga.spatio_temporal import City, daily
 from jyotisha.panchaanga.temporal.time import Date as JDate
 from jyotisha.panchaanga.temporal.time import Timezone
 from typing import Optional
+from utils.logger import logger
 
 
-def create_router(tithi_service: TithiService) -> APIRouter:
+def create_router(
+    tithi_service: TithiService, festival_service: FestivalService
+) -> APIRouter:
     router = APIRouter(
         prefix="/v1",
         tags=["panchanga"],
@@ -75,5 +79,21 @@ def create_router(tithi_service: TithiService) -> APIRouter:
             "timezone": timezone,
             "julian_day": jd,
         }
+
+    @router.get("/festivals")
+    async def get_festivals(
+        date: date = Query(
+            default="2025-04-03", description="Date in YYYY-MM-DD format"
+        ),
+        timezone: Optional[str] = Query(
+            None, description="Timezone (e.g., Asia/Kolkata)"
+        ),
+        city: Optional[str] = Query(None, description="City name (e.g., Pune)"),
+    ):
+        """Get festivals for a given date."""
+        festivals = festival_service.get_festivals_for_date(
+            date, timezone=timezone, city=city
+        )
+        return {"festivals": festivals}
 
     return router

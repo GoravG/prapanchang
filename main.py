@@ -1,15 +1,21 @@
 from fastapi import FastAPI
+from middleware.request_logger import RequestLoggingMiddleware
 from services.tithi_service import TithiService
+from services.festival_service import FestivalService
 from api.endpoints import create_router
 
 app = FastAPI()
 
-# Initialize TithiService
-tithi_service = TithiService()
+# Add request logging middleware
+app.add_middleware(RequestLoggingMiddleware)
 
-# Create router with dependencies
-api_router = create_router(tithi_service)
-app.include_router(api_router)
+# Initialize services
+tithi_service = TithiService()
+festival_service = FestivalService()
+
+# Create and include router
+router = create_router(tithi_service, festival_service)
+app.include_router(router)
 
 if __name__ == "__main__":
     import uvicorn
