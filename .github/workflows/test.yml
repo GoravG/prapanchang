@@ -27,7 +27,9 @@ jobs:
         run: npm install -g @usebruno/cli
 
       - name: Run Bruno tests
-        run: bru run --env local ./tests/bruno
+        run: |
+          cd bruno_api
+          bru run --env Local
 
       - name: Cleanup
         run: docker-compose down
