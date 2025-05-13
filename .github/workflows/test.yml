@@ -1,0 +1,28 @@
+name: API Tests
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Start services with Docker Compose
+        run: docker-compose up -d
+
+      - name: Install Bruno
+        run: npm install -g @usebruno/cli
+
+      - name: Wait for API to be ready
+        run: docker-compose run --rm api /wait-for-it.sh localhost:8000
+
+      - name: Run Bruno tests
+        run: bru run --env local ./tests/bruno
+
+      - name: Cleanup
+        run: docker-compose down

@@ -94,6 +94,10 @@ def create_router(
         festivals = festival_service.get_festivals_for_date(
             date, timezone=timezone, city=city
         )
-        return {"festivals": festivals}
+        return festivals
+
+    @router.get("/health")
+    async def health_check():
+        return {"status": "healthy"}
 
     return router

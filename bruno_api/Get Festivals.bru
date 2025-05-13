@@ -14,27 +14,34 @@ params:query {
   date: {{randomDate}}
 }
 
+assert {
+  res.status: eq 200
+  res.body: isJson
+  res.body.date: eq {{randomDate}}
+  res.body.festivals: isArray
+}
+
 script:pre-request {
   // Function to generate a random date string between two dates (YYYY-MM-DD format)
   function getRandomDateString(startDateStr, endDateStr) {
     const start = new Date(startDateStr);
     const end = new Date(endDateStr);
-
+  
     // Calculate random timestamp between start and end
     const randomTimestamp = start.getTime() + Math.random() * (end.getTime() - start.getTime());
-
+  
     // Create date object and format as YYYY-MM-DD
     const randomDate = new Date(randomTimestamp);
     const year = randomDate.getFullYear();
     const month = String(randomDate.getMonth() + 1).padStart(2, '0');
     const day = String(randomDate.getDate()).padStart(2, '0');
-
+  
     return `${year}-${month}-${day}`;
   }
-
+  
   // Generate random date between 2025-01-01 and today
-  const randomDateStr = getRandomDateString("2025-01-01", new Date().toISOString().split('T')[0]);
-
+  const randomDateStr = getRandomDateString("2023-01-01", "2023-12-31");
+  
   // Assign to variable
   bru.setVar("randomDate", randomDateStr);
 }
