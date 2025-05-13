@@ -1,13 +1,10 @@
 from fastapi import FastAPI
-from middleware.request_logger import RequestLoggingMiddleware
-from services.tithi_service import TithiService
-from services.festival_service import FestivalService
+
 from api.endpoints import create_router
+from services.festival_service import FestivalService
+from services.tithi_service import TithiService
 
 app = FastAPI()
-
-# Add request logging middleware
-app.add_middleware(RequestLoggingMiddleware)
 
 # Initialize services
 tithi_service = TithiService()

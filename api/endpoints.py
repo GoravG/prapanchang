@@ -1,13 +1,13 @@
-from fastapi import APIRouter, Query, Path, Request
 from datetime import date
-from services.tithi_service import TithiService
-from services.festival_service import FestivalService
-from schemas.date_schemas import DateInput
+from typing import Optional
+
+from fastapi import APIRouter, Path, Query
 from jyotisha.panchaanga.spatio_temporal import City, daily
 from jyotisha.panchaanga.temporal.time import Date as JDate
 from jyotisha.panchaanga.temporal.time import Timezone
-from typing import Optional
-from utils.logger import logger
+
+from services.festival_service import FestivalService
+from services.tithi_service import TithiService
 
 
 def create_router(
@@ -25,7 +25,7 @@ def create_router(
             default="2025-04-03", description="Date in YYYY-MM-DD format"
         ),
         timezone: Optional[str] = Query(
-            None, description="Timezone (e.g., Asia/Kolkata)"
+            None, description="Timezone (e.g. Asia/Kolkata)"
         ),
         city: Optional[str] = Query(None, description="City name (e.g., Pune)"),
     ):

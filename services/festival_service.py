@@ -1,10 +1,12 @@
 from datetime import date
-from typing import List, Dict, Any, Optional
-from .tithi_service import TithiService
-from app.constants.festivals import FESTIVAL_MAPPINGS
-from utils.logger import logger
-from jyotisha.panchaanga.temporal.time import Timezone
+from typing import Any, Dict, Optional
+
 from jyotisha.panchaanga.spatio_temporal import City
+from jyotisha.panchaanga.temporal.time import Timezone
+
+from app.constants.festivals import FESTIVAL_MAPPINGS
+
+from .tithi_service import TithiService
 
 
 class FestivalService:
@@ -32,6 +34,5 @@ class FestivalService:
                 "festivals": festivals,
                 "tithi_details": tithi_details,
             }
-        except Exception as e:
-            logger.error(f"Error getting festivals: {str(e)}")
+        except Exception:
             raise

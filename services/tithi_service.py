@@ -1,13 +1,14 @@
-from utils.logger import logger
-from jyotisha.panchaanga.temporal.time import Date, Timezone
-from jyotisha.panchaanga.spatio_temporal import daily as Daily
-from jyotisha.panchaanga.spatio_temporal import City
-from app.constants.constants import TITHI_NAMES, NAKSHATRA_NAMES, LUNAR_MONTH_NAMES
-from jyotisha.panchaanga.temporal.festival.rules import RulesRepo
-from jyotisha.panchaanga.temporal import names
-from indic_transliteration import sanscript
-from typing import Dict, Any, Optional
 from datetime import date
+from typing import Any, Dict, Optional
+
+from indic_transliteration import sanscript
+from jyotisha.panchaanga.spatio_temporal import City
+from jyotisha.panchaanga.spatio_temporal import daily as Daily
+from jyotisha.panchaanga.temporal import names
+from jyotisha.panchaanga.temporal.festival.rules import RulesRepo
+from jyotisha.panchaanga.temporal.time import Date, Timezone
+
+from app.constants.constants import LUNAR_MONTH_NAMES, NAKSHATRA_NAMES, TITHI_NAMES
 
 
 class TithiService:
@@ -81,8 +82,7 @@ class TithiService:
                 )
 
                 return adjusted_time.to_datetime().strftime("%I:%M %p")
-            except Exception as e:
-                logger.error(f"Error formatting time: {str(e)}")
+            except Exception:
                 return "N/A"
 
         return {
@@ -102,8 +102,7 @@ class TithiService:
                 )
                 return temp_service._calculate_tithi_internal(date_obj)
             return self._calculate_tithi_internal(date_obj)
-        except Exception as e:
-            logger.error(f"Error calculating tithi: {str(e)}")
+        except Exception:
             raise
 
     def _calculate_tithi_internal(self, date_obj: date) -> Dict[str, Any]:
@@ -111,13 +110,6 @@ class TithiService:
         try:
             panch = self.get_daily_panchaanga(date_obj)
             sunrise_angas = panch.sunrise_day_angas
-
-            logger.debug(
-                f"Date: {date_obj}, "
-                f"Tithi: {sunrise_angas.tithi_at_sunrise.index}, "
-                f"Nakshatra: {sunrise_angas.nakshatra_at_sunrise.index}, "
-                f"Month: {panch.lunar_month_sunrise.index}"
-            )
 
             return {
                 "date": date_obj,
@@ -133,6 +125,5 @@ class TithiService:
                 **self.get_solar_details(panch),
                 **self.get_time_details(panch),
             }
-        except Exception as e:
-            logger.error(f"Error calculating tithi: {str(e)}")
+        except Exception:
             raise
