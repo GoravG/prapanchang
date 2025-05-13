@@ -1,6 +1,9 @@
 # Use an official Python 3.10 base image
 FROM python:3.10
 
+# Install curl for healthcheck
+RUN apt-get update && apt-get install -y curl
+
 # Set the working directory inside the container
 WORKDIR /app
 
