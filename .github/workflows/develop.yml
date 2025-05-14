@@ -1,4 +1,4 @@
-name: API Tests
+name: Automated API Tests
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
 
       - name: Run Bruno tests
         run: |
-          cd bruno_api
+          cd bruno_api_collection
           bru run --env Local
 
       - name: Cleanup
