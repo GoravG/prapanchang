@@ -2,36 +2,36 @@
 
 # Tithi names
 TITHI_NAMES = [
-    "Pratipada",  # 1
-    "Dwitiya",  # 2
-    "Tritiya",  # 3
-    "Chaturthi",  # 4
-    "Panchami",  # 5
-    "Shashthi",  # 6
-    "Saptami",  # 7
-    "Ashtami",  # 8
-    "Navami",  # 9
-    "Dashami",  # 10
-    "Ekadashi",  # 11
-    "Dwadashi",  # 12
-    "Trayodashi",  # 13
-    "Chaturdashi",  # 14
-    "Purnima",  # 15 (Full Moon)
-    "Pratipada",  # 1
-    "Dwitiya",  # 2
-    "Tritiya",  # 3
-    "Chaturthi",  # 4
-    "Panchami",  # 5
-    "Shashthi",  # 6
-    "Saptami",  # 7
-    "Ashtami",  # 8
-    "Navami",  # 9
-    "Dashami",  # 10
-    "Ekadashi",  # 11
-    "Dwadashi",  # 12
-    "Trayodashi",  # 13
-    "Chaturdashi",  # 14
-    "Amavasya",  # 15 (New Moon)
+    "Shukla Pratipada",  # 1
+    "Shukla Dwitiya",  # 2
+    "Shukla Tritiya",  # 3
+    "Shukla Chaturthi",  # 4
+    "Shukla Panchami",  # 5
+    "Shukla Shashthi",  # 6
+    "Shukla Saptami",  # 7
+    "Shukla Ashtami",  # 8
+    "Shukla Navami",  # 9
+    "Shukla Dashami",  # 10
+    "Shukla Ekadashi",  # 11
+    "Shukla Dwadashi",  # 12
+    "Shukla Trayodashi",  # 13
+    "Shukla Chaturdashi",  # 14
+    "Shukla Purnima",  # 15 (Full Moon)
+    "Krushna Pratipada",  # 16
+    "Krushna Dwitiya",  # 17
+    "Krushna Tritiya",  # 18
+    "Krushna Chaturthi",  # 19
+    "Krushna Panchami",  # 20
+    "Krushna Shashthi",  # 21
+    "Krushna Saptami",  # 22
+    "Krushna Ashtami",  # 23
+    "Krushna Navami",  # 24
+    "Krushna Dashami",  # 25
+    "Krushna Ekadashi",  # 26
+    "Krushna Dwadashi",  # 27
+    "Krushna Trayodashi",  # 28
+    "Krushna Chaturdashi",  # 29
+    "Krushna Amavasya",  # 30 (New Moon)
 ]
 
 # Paksha names
@@ -86,18 +86,18 @@ SOLAR_MONTH_NAMES = (
 
 # LUNAR month names (Amanta system, starting with Chaitra)
 LUNAR_MONTH_NAMES = (
-    "Chaitra",
-    "Vaishakha",
-    "Jyeshtha",
-    "Ashadha",
-    "Shravana",
-    "Bhadrapada",
-    "Ashwina",
-    "Kartika",
-    "Margashirsha",
-    "Pausha",
-    "Magha",
-    "Phalguna",
+    "Chaitra",  # 1
+    "Vaishakha",  # 2
+    "Jyeshtha",  # 3
+    "Ashadha",  # 4
+    "Shravana",  # 5
+    "Bhadrapada",  # 6
+    "Ashwina",  # 7
+    "Kartika",  # 8
+    "Margashirsha",  # 9
+    "Pausha",  # 10
+    "Magha",  # 11
+    "Phalguna",  # 12
 )
 
 # Lunar month start and end definitions

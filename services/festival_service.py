@@ -25,7 +25,7 @@ class FestivalService:
 
             # Look up festivals based on month and tithi
             festivals = []
-            key = (tithi_details["month"], tithi_details["tithi"])
+            key = (tithi_details["month_name"], tithi_details["tithi_name"])
             if key in FESTIVAL_MAPPINGS:
                 festivals.append(FESTIVAL_MAPPINGS[key])
 
