@@ -90,8 +90,6 @@ def create_router(
         ),
         city: Optional[str] = Query(None, description="City name (e.g., Pune)"),
     ):
-        print(date)
-        print(type(date))
         """Get festivals for a given date."""
         festivals = festival_service.get_festivals_for_date(
             date, timezone=timezone, city=city
