@@ -29,4 +29,5 @@ FESTIVAL_MAPPINGS = {
     ("Magha", "Krushna Trayodashi"): "Mahashivaratri",
     ("Phalguna", "Shukla Purnima"): "Holi",
     ("Phalguna", "Krushna Pratipada"): "Dhulivandan",
+    ("Margashirsha", "Shukla Purnima"): "Datta Jayanti",
 }
